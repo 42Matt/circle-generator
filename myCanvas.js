@@ -1,6 +1,6 @@
-// size canvas set in js, otherwise problem
+// click → start → resizeCanvas → drawAll →circleArray→ animate→ requestAnimationFrame∞  → clearRect→ update(Ntimes)→ draw
 
-var button = document.querySelector('.c-menu__btn');
+const button = document.querySelector('.js-menu__btn');
 button.addEventListener('click', function(e){
 			
 	e.preventDefault();
@@ -8,9 +8,9 @@ button.addEventListener('click', function(e){
 
 });
 
-var start = function() {
-	var canvas = document.querySelector('canvas');
-	var c = canvas.getContext('2d');
+const start = function() {
+	let canvas = document.querySelector('canvas');
+	const c = canvas.getContext('2d');
 
 	window.addEventListener('resize', resizeCanvas, false);
 	
@@ -20,29 +20,21 @@ var start = function() {
 		
 		drawAll();
 	}
-
+	
 	resizeCanvas();
 
 	function drawAll() {
 		
 		const hexMaxColor = 16777215;
 
-		//edit those parameters for custom canvas
-		// Here problem:
-		var circleNumbers =  document.querySelector('.js-menu__number-input').value;
+		//Menu Parameters:
+		let circleNumbers =  document.querySelector('.js-menu__number-input').value;
 		circleNumbers = parseInt(circleNumbers,10);
-		var radius =  document.querySelector('.js-menu__size-input').value;
+		let radius =  document.querySelector('.js-menu__size-input').value;
 		radius = parseInt(radius,10);
-		console.log(typeof circleNumbers);
-		console.log(typeof radius);
+		let speedBoost = 20;
 
-		// var circleNumbers = this.circleNumbers;
-		// var radius = this.radius;
 
-		// var circleNumbers = 30;
-		// var radius = 30;
-		
-		var speedBoost = 20;
 
 		function randomNumber(number) {
 			return Math.floor(Math.random()*(number + 1));
@@ -54,18 +46,7 @@ var start = function() {
 			this.dx = dx;
 			this.dy = dy;
 			this.radius = radius;
-			this.draw = function() {
-				c.beginPath();
-				c.arc(this.x, this.y, this.radius, Math.PI * 2, false);
-	
-				c.strokeStyle = '#' + randomNumber(hexMaxColor).toString(16);
-				c.stroke();
 
-				// c.fillStyle = 'white';
-				// c.fill();
-
-			}
-			
 			//how it moves:
 			this.update = function() {
 				if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
@@ -79,28 +60,49 @@ var start = function() {
 				this.y += this.dy
 				this.draw();
 			}
+
+			this.draw = function() {
+				c.beginPath();
+				c.arc(this.x, this.y, this.radius, Math.PI * 2, false);
+	
+				c.strokeStyle = '#' + randomNumber(hexMaxColor).toString(16);
+				c.stroke();
+
+				// c.fillStyle = 'white';
+				// c.fill();
+			}
 		}
 		
-		var circleArray = [];
-		for ( var i = 0; i < circleNumbers; i++ ){
+		const circleArray = [];
+		for ( let i = 0; i < circleNumbers; i++ ){
 			
 			// problem » circles span at edges, solution:
 			// "+ radius" » left & up sides fix
-			var x = Math.random() * (innerWidth - radius*2)+ radius;
-			var y = Math.random() * (innerHeight- radius*2) + radius;
-			var dx = (Math.random() - 0.5) * speedBoost;
-			var dy = (Math.random() - 0.5) * speedBoost;
+			let x = Math.random() * (innerWidth - radius*2)+ radius;
+			let y = Math.random() * (innerHeight- radius*2) + radius;
+			let dx = (Math.random() - 0.5) * speedBoost;
+			let dy = (Math.random() - 0.5) * speedBoost;
 			circleArray.push(new Circle(x,y,dx,dy,radius));
 		}
 
-		(function animate() {
+		function animate() {
 			requestAnimationFrame(animate); // here ∞ loop
-			// c.clearRect(0, 0, innerWidth, innerHeight);
+
 			c.clearRect(0, 0, innerWidth, innerHeight);
-			for ( var i = 0; i < circleArray.length; i++ ){ 
+			
+			for ( let i = 0; i < circleArray.length; i++ ){ 
 				circleArray[i].update();
 			}
-		})();
+			// for ( let elem of circleArray){ 
+			// 	circleArray[elem].update();
+			// }
+			// circleArray.forEach(function (elem) {
+			// 	circleArray[elem].update();
+			// });
+			
+		};
+		animate();
+
 	}
 };
 
