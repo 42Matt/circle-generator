@@ -12,8 +12,8 @@ canvas {
     position: absolute;
     bottom:0;
     width: 100%;
+    
 }
-
 
 .c-menu{
     display: flex;
@@ -39,7 +39,6 @@ canvas {
     margin: 0 0 1em 0;
 }
 
-
 .c-menu__btn {
     padding: 0.4em 2em;
     border: none;
@@ -49,7 +48,6 @@ canvas {
     
 }
 .c-menu__btn:hover {
-
     background-color: rgba(76, 175, 79, 0.959);
     text-shadow: 1px 1px 2px #000000;
 

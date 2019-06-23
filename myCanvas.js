@@ -1,11 +1,13 @@
-// click → start → resizeCanvas → drawAll →circleArray→ animate→ requestAnimationFrame∞  → clearRect→ update(Ntimes)→ draw
+// click → start → resizeCanvas → drawAll →circleArray(create Circles)→ animate→ requestAnimationFrame∞  → clearRect→ ChangeTurnAtEdges→ draw
 
 const button = document.querySelector('.js-menu__btn');
+
 button.addEventListener('click', function(e){
-			
+	// window.location.reload();
+
 	e.preventDefault();
 	start();
-
+	
 });
 
 const start = function() {
@@ -34,20 +36,18 @@ const start = function() {
 		radius = parseInt(radius,10);
 		let speedBoost = 20;
 
-
-
 		function randomNumber(number) {
 			return Math.floor(Math.random()*(number + 1));
 		}
 		
-		function Circle (x, y, dx, dy, radius) {
+		function Circle (x, y, dx, dy, radius,cColor) {
 			this.x = x;
 			this.y = y;
 			this.dx = dx;
 			this.dy = dy;
 			this.radius = radius;
-
-			//how it moves:
+			this.cColor = cColor;
+			//change turn at edges:
 			this.update = function() {
 				if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
 					this.dx = -this.dx;
@@ -64,12 +64,12 @@ const start = function() {
 			this.draw = function() {
 				c.beginPath();
 				c.arc(this.x, this.y, this.radius, Math.PI * 2, false);
-	
-				c.strokeStyle = '#' + randomNumber(hexMaxColor).toString(16);
-				c.stroke();
+				// console.log('color: '+cColor);
+				// c.strokeStyle = cColor;
+				// c.stroke();
 
-				// c.fillStyle = 'white';
-				// c.fill();
+				c.fillStyle = cColor;
+				c.fill();
 			}
 		}
 		
@@ -80,9 +80,10 @@ const start = function() {
 			// "+ radius" » left & up sides fix
 			let x = Math.random() * (innerWidth - radius*2)+ radius;
 			let y = Math.random() * (innerHeight- radius*2) + radius;
-			let dx = (Math.random() - 0.5) * speedBoost;
+			let dx = (Math.random() - 0.5) * speedBoost; // [-0.5,+0.5]*speedBoost
 			let dy = (Math.random() - 0.5) * speedBoost;
-			circleArray.push(new Circle(x,y,dx,dy,radius));
+			let cColor ='#' + randomNumber(hexMaxColor).toString(16);
+			circleArray.push(new Circle(x,y,dx,dy,radius,cColor));
 		}
 
 		function animate() {
@@ -90,15 +91,9 @@ const start = function() {
 
 			c.clearRect(0, 0, innerWidth, innerHeight);
 			
-			for ( let i = 0; i < circleArray.length; i++ ){ 
-				circleArray[i].update();
+			for (let elem of circleArray){ 
+				elem.update();
 			}
-			// for ( let elem of circleArray){ 
-			// 	circleArray[elem].update();
-			// }
-			// circleArray.forEach(function (elem) {
-			// 	circleArray[elem].update();
-			// });
 			
 		};
 		animate();
