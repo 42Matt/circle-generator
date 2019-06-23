@@ -52,3 +52,12 @@ canvas {
     text-shadow: 1px 1px 2px #000000;
 
 }
+
+.hidden {
+    opacity: 0;
+        visibility: hidden;
+}
+
+/* .js-menu__show {
+    align-self: flex-start;
+} */

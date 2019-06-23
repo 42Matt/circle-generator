@@ -31,8 +31,18 @@ const start = function() {
 
 		//Menu Parameters:
 		let circleNumbers =  document.querySelector('.js-menu__number-input').value;
+
 		circleNumbers = parseInt(circleNumbers,10);
+		if (circleNumbers > 800) {
+			alert('You\'ve chosen too many Circles');
+			circleNumbers = 100;
+		}
+
 		let radius =  document.querySelector('.js-menu__size-input').value;
+		if (radius > 400) {
+			alert('Given size is to large');
+			radius = 30;
+		}
 		radius = parseInt(radius,10);
 		let speedBoost = 20;
 
@@ -100,4 +110,20 @@ const start = function() {
 
 	}
 };
+
+document.querySelector('.js-menu__show').addEventListener('click', function(e){
+	// window.location.reload();
+	e.preventDefault();
+	const cMenu = document.querySelectorAll('.c-menu');
+	for (const element of cMenu){
+		element.classList.toggle('js-hide');
+	}
+	const showButton = document.querySelector('.js-menu__show')
+	if (showButton.textContent === 'Hide Menu') {
+		showButton.textContent = 'Show Menu';  
+	} else {
+		showButton.textContent = 'Hide Menu';
+	}
+});
+
 
